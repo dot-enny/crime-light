@@ -1,6 +1,10 @@
 import { MapPin, Shield, Eye, Globe } from "lucide-react"
+import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
+
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
@@ -55,7 +59,7 @@ function LandingPage() {
                                     <p className="text-sm">Crime is relatively low, but be vigilant. Spikes tend to occur at 6PM.</p>
                                 </div>
                             </div>
-                            <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                            <button onClick={() => navigate('auth/sign-in')} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-medium transition-colors cursor-pointer">
                                 Get Started with Butler
                             </button>
                         </div>
