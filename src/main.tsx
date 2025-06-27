@@ -9,8 +9,10 @@ import { MapView } from './pages/MapView.tsx';
 import { DashBoardLayout } from './layouts/DashBoard.tsx';
 import { AuthLayout } from './layouts/Auth.tsx';
 import MakeReport from './pages/MakeReport.tsx';
+import LandingPage from './pages/LandingPage.tsx';
 
 const router = createBrowserRouter([
+  { path: '/', element: <LandingPage /> },
   {
     path: '/auth',
     element: <AuthLayout />,
@@ -20,10 +22,10 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/',
+    path: '/dashboard',
     element: <DashBoardLayout />,
     children: [
-      { path: '/', element: <Home />, },
+      { path: '/dashboard', element: <Home />, },
       { path: 'map-view', element: <MapView /> },
       { path: 'make-report', element: <MakeReport /> },
     ]

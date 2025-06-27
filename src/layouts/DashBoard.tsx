@@ -25,15 +25,15 @@ export const DashBoardLayout = () => {
       {/* Left Sidebar */}
       <div className="w-64 bg-black text-white p-6 h-full fixed">
         <nav className="space-y-6">
-          <Link to="/" className={`flex items-center gap-3 ${isActive("/") ? "text-white" : "text-gray-400"}`}>
+          <Link to="/dashboard" className={`flex items-center gap-3 ${isActive("/") ? "text-white" : "text-gray-400"}`}>
             <HomeIcon size={20} />
             <span className="text-sm font-medium">HOME</span>
           </Link>
-          <Link to="map-view" className={`flex items-center gap-3 ${isActive("map-view") ? "text-white" : "text-gray-400"}`}>
+          <Link to="/dashboard/map-view" className={`flex items-center gap-3 ${isActive("map-view") ? "text-white" : "text-gray-400"}`}>
             <Map size={20} />
             <span className="text-sm font-medium">VIEW MAP</span>
           </Link>
-          <Link to="make-report" className={`flex items-center gap-3 ${isActive("make-report") ? "text-white" : "text-gray-400"}`}>
+          <Link to="/dashboard/make-report" className={`flex items-center gap-3 ${isActive("make-report") ? "text-white" : "text-gray-400"}`}>
             <FileText size={20} />
             <span className="text-sm font-medium">MAKE REPORT</span>
           </Link>
