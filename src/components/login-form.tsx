@@ -1,4 +1,3 @@
-// Update the import path below if your utils file is located elsewhere, e.g.:
 import { cn } from "../lib/utils"
 import { Button } from "../components/ui/button"
 import {
@@ -10,12 +9,57 @@ import {
 } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { Eye, EyeOff } from "lucide-react"
+import { Spinner } from "./Spinner"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('https://crime-light-safecode-avzdax-2.onrender.com/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Login successful:', result);
+        navigate('/dashboard');
+        // You can add success handling here (e.g., store token, redirect)
+      } else {
+        const errorData = await response.json();
+        console.error('Login failed:', errorData);
+        // You can add error handling here (e.g., show error message)
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      // You can add network error handling here
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className={cn("flex flex-col gap-6 min-w-sm", className)} {...props}>
       <Card className="frosted-glass bg-neutral-900 text-white border-neutral-800">
@@ -26,12 +70,13 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -41,10 +86,34 @@ export function LoginForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required />
+                <div className="relative">
+                  <Input 
+                    id="password" 
+                    name="password" 
+                    type={showPassword ? "text" : "password"} 
+                    className="pr-10"
+                    required 
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
-              <Button variant="outline" className="w-full text-black cursor-pointer mt-6">
-                Login
+              <Button 
+                variant="outline" 
+                className="w-full text-black cursor-pointer mt-6"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? <Spinner /> : "Login"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

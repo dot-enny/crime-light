@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom"
-import { HomeIcon, FileText, Bot, Map } from "lucide-react"
+import { HomeIcon, FileText, Bot, Map, LogOut } from "lucide-react"
 
 export const DashBoardLayout = () => {
   const location = useLocation()
@@ -11,7 +11,7 @@ export const DashBoardLayout = () => {
   }
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-black">
       {/* Header */}
       <header className="bg-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 w-full z-10">
         <img src="./butler-logo.svg" />
@@ -36,6 +36,10 @@ export const DashBoardLayout = () => {
           <Link to="/dashboard/make-report" className={`flex items-center gap-3 ${isActive("make-report") ? "text-white" : "text-gray-400"}`}>
             <FileText size={20} />
             <span className="text-sm font-medium">MAKE REPORT</span>
+          </Link>
+          <Link to="/auth/sign-in" className="fixed bottom-0 flex items-center gap-x-2">
+            <LogOut className="text-red-500" />
+            <span className="text-sm font-medium text-red-500">Logout</span>
           </Link>
           <div className="flex items-center gap-3 text-gray-400">
             <Bot size={20} />
