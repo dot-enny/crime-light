@@ -11,13 +11,15 @@ export default function Home() {
     return (
         <div
             className="flex-1 bg-black text-white p-6 relative"
-            style={{
-                background: 'url(./home-bg.png)',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
         >
+            {/* Dotted background pattern */}
+            <div
+                className="absolute inset-0 opacity-20 pointer-events-none"
+                style={{
+                    backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
+                    backgroundSize: "30px 30px",
+                }}
+            />
 
             <div className="flex gap-6 h-full">
                 {/* Center Content */}
