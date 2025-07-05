@@ -19,7 +19,7 @@ function LandingPage() {
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-2">
                             <img src="./butler-logo.svg" className="size-10" />
-                            <span className="text-xl font-bold text-black">BUTLER</span>
+                            <span className="text-xl font-bold text-black font-outfit">BUTLER</span>
                         </div>
                         
                         {/* Desktop Navigation */}
@@ -94,12 +94,12 @@ function LandingPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="space-y-8 animate-fade-in-up">
-                            <h1 className="text-5xl lg:text-6xl font-bold leading-tight animate-slide-in-left">
+                            <h1 className="text-5xl lg:text-6xl font-bold leading-tight font-outfit">
                                 Batman has Alfred.
                                 <br />
                                 <span className="text-white">Who do you have?</span>
                             </h1>
-                            <p className="text-xl text-gray-300 leading-relaxed animate-fade-in delay-300">
+                            <p className="text-xl text-gray-300 leading-relaxed animate-fade-in delay-300 font-inter">
                                 The Butler is using real-time data to protect you. He is your eyes and ears at all times.
                             </p>
                             <div className="flex items-start space-x-3 text-gray-300 animate-fade-in delay-500">
@@ -148,17 +148,17 @@ function LandingPage() {
                             </div>
                         </div>
                         <div className="space-y-6 animate-on-scroll-right delay-300">
-                            <h2 className="text-4xl font-bold text-gray-900">Who is The Butler?</h2>
-                            <p className="text-gray-700 leading-relaxed">
+                            <h2 className="text-4xl font-bold text-gray-900 font-outfit">Who is The Butler?</h2>
+                            <p className="text-gray-700 leading-relaxed font-inter">
                                 The Butler is your dynamic, data-driven, pattern-recognising guardian, whose entire purpose is your
                                 safety, at all times. The Butler sees, listens, and preempts long before you even need to.
                             </p>
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text-gray-700 leading-relaxed font-inter">
                                 In conjunction with AI-transformed surveillance, trained models and refined user input, the Butler can
                                 preempt, with a 92% confidence interval, the likelihood of suspicious and criminal activity in any
                                 environment.
                             </p>
-                            <button className="text-purple-600 hover:text-purple-700 font-medium transition-all duration-300 hover:scale-105 transform">Read More</button>
+                            <button className="text-purple-600 hover:text-purple-700 font-medium transition-all duration-300 hover:scale-105 transform font-inter">Read More</button>
                         </div>
                     </div>
                 </div>
@@ -169,12 +169,12 @@ function LandingPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="space-y-8 animate-on-scroll-right">
-                            <h2 className="text-4xl font-bold">Where is The Butler?</h2>
-                            <p className="text-gray-300 leading-relaxed">
+                            <h2 className="text-4xl font-bold font-outfit">Where is The Butler?</h2>
+                            <p className="text-gray-300 leading-relaxed font-inter">
                                 Everywhere. On the streets, in buildings, in vehicles and in the air. He is part of an extensive neural
                                 network, deeply embedded in the
                             </p>
-                            <button className="bg-white text-gray-900 px-6 py-2 rounded font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 transform hover:shadow-lg">
+                            <button className="bg-white text-gray-900 px-6 py-2 rounded font-medium hover:bg-gray-100 transition-all duration-300 hover:scale-105 transform hover:shadow-lg font-inter">
                                 Read Documentation
                             </button>
                         </div>
@@ -195,7 +195,7 @@ function LandingPage() {
                     <div className="grid md:grid-cols-3 gap-12 relative animate-on-scroll">
                         {/* Information Column */}
                         <div className="animate-on-scroll delay-100">
-                            <h3 className="text-lg font-semibold mb-6">INFORMATION</h3>
+                            <h3 className="text-lg font-semibold mb-6 font-outfit">INFORMATION</h3>
                             <ul className="space-y-3">
                                 <li>
                                     <a href="#" className="text-gray-300 hover:text-white transition-colors">
@@ -230,7 +230,7 @@ function LandingPage() {
 
                         {/* Legal Column */}
                         <div className="animate-on-scroll delay-200">
-                            <h3 className="text-lg font-semibold mb-6">LEGAL</h3>
+                            <h3 className="text-lg font-semibold mb-6 font-outfit">LEGAL</h3>
                             <ul className="space-y-3">
                                 <li>
                                     <a href="#" className="text-gray-300 hover:text-white transition-colors">
@@ -265,7 +265,7 @@ function LandingPage() {
 
                         {/* Socials Column */}
                         <div className="animate-on-scroll delay-300">
-                            <h3 className="text-lg font-semibold mb-6">SOCIALS</h3>
+                            <h3 className="text-lg font-semibold mb-6 font-outfit">SOCIALS</h3>
                             <ul className="space-y-3">
                                 <li>
                                     <a href="#" className="text-gray-300 hover:text-white transition-colors">
