@@ -53,6 +53,7 @@ export const DashBoardLayout = () => {
           <nav className="space-y-6 pt-20 lg:pt-0">
             <Link 
               to="/dashboard" 
+              state={{ from: location.pathname }}
               className={`flex items-center gap-3 hover:text-white transition-colors ${isActive("/") ? "text-white" : "text-gray-400"}`}
               onClick={() => setIsSidebarOpen(false)}
             >
@@ -61,6 +62,7 @@ export const DashBoardLayout = () => {
             </Link>
             <Link 
               to="/dashboard/map-view" 
+              state={{ from: location.pathname }}
               className={`flex items-center gap-3 hover:text-white transition-colors ${isActive("map-view") ? "text-white" : "text-gray-400"}`}
               onClick={() => setIsSidebarOpen(false)}
             >
@@ -69,6 +71,7 @@ export const DashBoardLayout = () => {
             </Link>
             <Link 
               to="/dashboard/make-report" 
+              state={{ from: location.pathname }}
               className={`flex items-center gap-3 hover:text-white transition-colors ${isActive("make-report") ? "text-white" : "text-gray-400"}`}
               onClick={() => setIsSidebarOpen(false)}
             >
