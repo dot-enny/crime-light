@@ -142,13 +142,13 @@ export default function MakeReport() {
   if (isSubmitted) {
     return (
       <div className="min-h-[90vh] bg-black flex items-center justify-center p-4 relative overflow-hidden">
-        {/* <div
-          className="absolute inset-0 opacity-20"
+        <div
+          className="absolute inset-0 opacity-20 pointer-events-none"
           style={{
             backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
             backgroundSize: "30px 30px",
           }}
-        /> */}
+        />
 
         <Card className="w-full max-w-md bg-black border-gray-800 border-0">
           <CardContent className="p-8 text-center space-y-6">
@@ -197,13 +197,13 @@ export default function MakeReport() {
   return (
     <div className="min-h-[90vh] bg-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Dotted background pattern */}
-      {/* <div
-        className="absolute inset-0 opacity-20"
+      <div
+        className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
           backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
           backgroundSize: "30px 30px",
         }}
-      /> */}
+      />
 
       <Card className="w-full max-w-2xl bg-black border-gray-800 border-0">
         <CardHeader className="pb-4">
