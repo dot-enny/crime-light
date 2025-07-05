@@ -15,7 +15,7 @@ export const DashBoardLayout = () => {
   return (
     <div className="h-screen bg-black flex flex-col">
       {/* Header */}
-      <header className="bg-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 w-full z-50">
+      <header className="bg-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between fixed w-full z-50">
         <div className="flex items-center">
           <img src="./butler-logo.svg" className="h-8" />
         </div>
@@ -91,7 +91,7 @@ export const DashBoardLayout = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 lg:ml-64 overflow-auto">
+        <div className="flex-1 lg:ml-64 overflow-auto pt-16">
           <Outlet />
         </div>
       </div>
