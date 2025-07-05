@@ -7,6 +7,28 @@ import "../App.css"
 import { dangerousLocations } from "../data";
 import React from "react";
 
+// Custom hook to track window size for responsive behavior
+function useWindowSize() {
+    const [windowSize, setWindowSize] = React.useState({
+        width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+        height: typeof window !== 'undefined' ? window.innerHeight : 800,
+    });
+
+    React.useEffect(() => {
+        function handleResize() {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return windowSize;
+}
+
 // --- Component for handling map interactions (e.g., click-to-fly) ---
 function MapInteractions({ center, zoom }: { center: LatLngTuple; zoom: number }) {
     const map = useMap(); // Get the map instance
@@ -37,8 +59,26 @@ function MapInteractions({ center, zoom }: { center: LatLngTuple; zoom: number }
 
 export const MapView = () => {
     const defaultLagosCenter: LatLngTuple = [6.5244, 3.3792]; // A general center point for Lagos
+    const windowSize = useWindowSize();
+    
+    // Responsive values based on screen size
+    const isMobile = windowSize.width < 640;
+    const isTablet = windowSize.width >= 640 && windowSize.width < 1024;
+    
+    // Set initial zoom based on screen size
+    const getInitialZoom = () => {
+        if (isMobile) return 10;
+        if (isTablet) return 11;
+        return 11;
+    };
+    
     const [mapCenter, setMapCenter] = React.useState<LatLngTuple>(defaultLagosCenter);
-    const [mapZoom, setMapZoom] = React.useState(11); // Initial zoom level
+    const [mapZoom, setMapZoom] = React.useState(getInitialZoom());
+
+    // Update zoom when screen size changes
+    React.useEffect(() => {
+        setMapZoom(getInitialZoom());
+    }, [isMobile, isTablet]);
 
     L.Icon.Default.mergeOptions({
         iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
@@ -81,61 +121,78 @@ export const MapView = () => {
         } else {
             setMapCenter([coords.lat, coords.lng]);
         }
-        setMapZoom(14); // Zoom in a bit when flying to a specific location
+        // Use responsive zoom levels - closer zoom on mobile for better detail
+        setMapZoom(isMobile ? 15 : 14);
     };
 
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-            {/* Optional: Add buttons to fly to specific locations */}
+        <div className="flex flex-col h-full">
+            {/* Responsive header with location buttons */}
             <div className="bg-black">
-                <div className="flex items-center p-3 bg-neutral-950"
+                <div className="flex flex-col sm:flex-row sm:items-center p-3 sm:p-4 bg-neutral-950 gap-3"
                     style={{
-                        backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)`, // use rgba for opacity
+                        backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)`,
                         backgroundSize: "30px 30px",
                     }}
                 >
-                    <h3>Quick Fly To:</h3>
-                    {dangerousLocations.slice(0, 5).map((loc) => ( // Show first 5 for brevity
-                        <button
-                            key={loc.name}
-                            onClick={() => flyToLocation(loc.coordinates)}
-                            style={{ margin: '5px', padding: '8px 12px', cursor: 'pointer' }}
-                            className="text-white"
-                        >
-                            {loc.name}
-                        </button>
-                    ))}
+                    <h3 className="text-white text-sm sm:text-base font-medium whitespace-nowrap mb-2 sm:mb-0 sm:mr-4">
+                        Quick Fly To:
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                        {dangerousLocations.slice(0, 5).map((loc) => (
+                            <button
+                                key={loc.name}
+                                onClick={() => flyToLocation(loc.coordinates)}
+                                className="text-white bg-neutral-800 hover:bg-neutral-700 transition-colors duration-200 
+                                         px-3 py-2 text-xs sm:text-sm rounded-md border border-neutral-600
+                                         whitespace-nowrap"
+                            >
+                                {loc.name}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
-            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true}>
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <MapInteractions center={mapCenter} zoom={mapZoom} />
-                {dangerousLocations.map((location, index) => (
-                    <Marker
-                        key={index}
-                        position={location.coordinates}
-                        // You could customize the icon color based on the safetyRating
-                        icon={L.divIcon({
-                            className: 'custom-div-icon',
-                            html: `<div style="background-color:${getSafetyColor(location.safetyRating)}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
-                            iconSize: [24, 24],
-                            iconAnchor: [12, 12]
-                        })}
-                    >
-                        <Popup>
-                            <b>{location.name}</b><br />
-                            Risk Level: <strong>{getSafetyText(location.safetyRating)}</strong><br />
-                            {location.description}
-                        </Popup>
-                    </Marker>
-                ))}
-
-            </MapContainer>
+            <div className="flex-1 relative min-h-0">
+                <MapContainer 
+                    center={mapCenter} 
+                    zoom={mapZoom} 
+                    scrollWheelZoom={true}
+                    className="w-full h-full absolute inset-0"
+                    style={{ zIndex: 1 }}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MapInteractions center={mapCenter} zoom={mapZoom} />
+                    {dangerousLocations.map((location, index) => (
+                        <Marker
+                            key={index}
+                            position={location.coordinates}
+                            icon={L.divIcon({
+                                className: 'custom-div-icon',
+                                html: `<div style="background-color:${getSafetyColor(location.safetyRating)}; 
+                                       width: ${isMobile ? '16px' : '20px'}; 
+                                       height: ${isMobile ? '16px' : '20px'}; 
+                                       border-radius: 50%; border: 2px solid white;"></div>`,
+                                iconSize: isMobile ? [20, 20] : [24, 24],
+                                iconAnchor: isMobile ? [10, 10] : [12, 12]
+                            })}
+                        >
+                            <Popup>
+                                <div className="text-sm max-w-xs">
+                                    <b className={isMobile ? 'text-sm' : 'text-base'}>{location.name}</b><br />
+                                    <span className="text-xs">Risk Level: <strong>{getSafetyText(location.safetyRating)}</strong></span><br />
+                                    <span className="text-xs">{location.description}</span>
+                                </div>
+                            </Popup>
+                        </Marker>
+                    ))}
+                </MapContainer>
+            </div>
         </div>
     )
 };
