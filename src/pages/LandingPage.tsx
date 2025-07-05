@@ -1,21 +1,25 @@
-import { MapPin, Shield, Eye, Globe } from "lucide-react"
+import { MapPin, Shield, Eye, Globe, Menu, X } from "lucide-react"
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function LandingPage() {
 
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 -z-20">
+            <header className="bg-white border-b border-gray-200 relative z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center space-x-2">
                             <img src="./butler-logo.svg" className="size-10" />
                             <span className="text-xl font-bold text-black">BUTLER</span>
                         </div>
-                        <nav className="flex space-x-8">
+                        
+                        {/* Desktop Navigation */}
+                        <nav className="hidden md:flex space-x-8">
                             <a href="#" className="text-gray-700 hover:text-black font-medium">
                                 ABOUT
                             </a>
@@ -26,6 +30,48 @@ function LandingPage() {
                                 CONTACT
                             </a>
                         </nav>
+
+                        {/* Mobile menu button */}
+                        <button
+                            className="md:hidden p-2 rounded-md text-gray-700 hover:text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        >
+                            <div className="relative w-6 h-6">
+                                <Menu className={`h-6 w-6 absolute transition-all duration-300 ${isMenuOpen ? 'opacity-0 rotate-180' : 'opacity-100 rotate-0'}`} />
+                                <X className={`h-6 w-6 absolute transition-all duration-300 ${isMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-180'}`} />
+                            </div>
+                        </button>
+                    </div>
+
+                    {/* Mobile Navigation Menu */}
+                    <div className={`md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg transition-all duration-300 ease-in-out ${
+                        isMenuOpen 
+                            ? 'opacity-100 transform translate-y-0' 
+                            : 'opacity-0 transform -translate-y-2 pointer-events-none'
+                    }`}>
+                        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                            <a
+                                href="#"
+                                className="block px-3 py-2 text-gray-700 hover:text-black hover:bg-gray-100 font-medium rounded-md transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                ABOUT
+                            </a>
+                            <a
+                                href="#"
+                                className="block px-3 py-2 text-gray-700 hover:text-black hover:bg-gray-100 font-medium rounded-md transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                SERVICES
+                            </a>
+                            <a
+                                href="#"
+                                className="block px-3 py-2 text-gray-700 hover:text-black hover:bg-gray-100 font-medium rounded-md transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                CONTACT
+                            </a>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -63,7 +109,7 @@ function LandingPage() {
                                 Get Started with Butler
                             </button>
                         </div>
-                        <div className="relative z-20">
+                        <div className="relative z-20 hidden lg:block">
                             <img src="./robot-butler.svg" alt="Butler AI Robot" className="w-[797px] h-[823px] -bottom-96 mx-auto absolute z-20" />
                         </div>
                     </div>
