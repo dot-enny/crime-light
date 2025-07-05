@@ -21,7 +21,28 @@ export function SuccessPage({ isAnonymous, onSubmitAnother }: SuccessPageProps) 
   }, [])
 
   return (
-    <div className="flex-1 bg-black text-white p-4 md:p-6 relative">
+    <>
+      <style>{`
+        @keyframes slideInBounce {
+          0% {
+            transform: translateY(-12px) scale(0.8);
+            opacity: 0;
+          }
+          60% {
+            transform: translateY(2px) scale(1.05);
+            opacity: 1;
+          }
+          80% {
+            transform: translateY(-1px) scale(0.98);
+          }
+          100% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+        }
+      `}</style>
+      
+      <div className="flex-1 bg-black text-white p-4 md:p-6 relative">
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
@@ -37,12 +58,13 @@ export function SuccessPage({ isAnonymous, onSubmitAnother }: SuccessPageProps) 
             <div className="flex justify-center">
               <div className={`relative transition-all duration-700 ease-out ${
                 showAnimation 
-                  ? 'scale-100 opacity-100' 
-                  : 'scale-50 opacity-0'
+                  ? 'scale-100 opacity-100 translate-y-0' 
+                  : 'scale-50 opacity-0 -translate-y-4'
               }`}>
-                <CheckCircle className={`h-16 w-16 text-green-400 transition-all duration-1000 ${
-                  showAnimation ? 'animate-bounce' : ''
-                }`} />
+                <CheckCircle className={`h-16 w-16 text-green-400 transition-all duration-500`} 
+                style={{
+                  animation: showAnimation ? 'slideInBounce 0.8s ease-out' : 'none'
+                }} />
                 
                 {/* Ripple effect */}
                 <div className={`absolute inset-0 rounded-full border-2 border-green-400 transition-all duration-1000 ${
@@ -91,7 +113,7 @@ export function SuccessPage({ isAnonymous, onSubmitAnother }: SuccessPageProps) 
             }`}>
               <Button 
                 onClick={onSubmitAnother}
-                className="w-full bg-white text-black hover:bg-gray-200 cursor-pointer hover:scale-105 transition-transform duration-200"
+                className="w-full bg-white text-black hover:bg-gray-200 cursor-pointer hover:scale-102 transition-transform duration-200"
               >
                 Submit Another Report
               </Button>
@@ -100,5 +122,6 @@ export function SuccessPage({ isAnonymous, onSubmitAnother }: SuccessPageProps) 
         </Card>
       </div>
     </div>
+    </>
   )
 }
