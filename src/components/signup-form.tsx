@@ -43,27 +43,31 @@ export function SignUpForm({
         setIsLoading(true)
         
         try {
-            const response = await fetch('https://crime-light-safecode-avzdax-2.onrender.com/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
+            // Simulate API call delay for demo purposes
+            await new Promise(resolve => setTimeout(resolve, 1200));
             
-            if (response.ok) {
-                const result = await response.json()
-                console.log('Registration successful:', result)
-                navigate('/dashboard')
-                // You can add success handling here (e.g., redirect, show success message)
-            } else {
-                const errorData = await response.json()
-                console.error('Registration failed:', errorData)
-                // You can add error handling here (e.g., show error message)
-            }
+            // Simulate successful registration
+            const result = {
+                success: true,
+                user: {
+                    id: 'demo-user-' + Date.now(),
+                    email: data.email,
+                    username: data.username,
+                    role: data.role
+                },
+                token: 'demo-jwt-token-' + Date.now()
+            };
+            
+            console.log('Registration successful (simulated):', result)
+            
+            // Store simulated auth data in localStorage for demo
+            localStorage.setItem('authToken', result.token);
+            localStorage.setItem('userData', JSON.stringify(result.user));
+            
+            navigate('/dashboard')
         } catch (error) {
-            console.error('Network error:', error)
-            // You can add network error handling here
+            console.error('Simulation error:', error)
+            // You can add error handling here (e.g., show error message)
         } finally {
             setIsLoading(false)
         }

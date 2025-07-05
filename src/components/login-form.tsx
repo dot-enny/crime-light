@@ -34,27 +34,30 @@ export function LoginForm({
     setIsLoading(true);
     
     try {
-      const response = await fetch('https://crime-light-safecode-avzdax-2.onrender.com/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      // Simulate API call delay for demo purposes
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Login successful:', result);
-        navigate('/dashboard');
-        // You can add success handling here (e.g., store token, redirect)
-      } else {
-        const errorData = await response.json();
-        console.error('Login failed:', errorData);
-        // You can add error handling here (e.g., show error message)
-      }
+      // Simulate successful login (you can add validation logic here if needed)
+      const result = {
+        success: true,
+        user: {
+          id: 'demo-user-123',
+          email: data.email,
+          username: 'Demo User'
+        },
+        token: 'demo-jwt-token-12345'
+      };
+      
+      console.log('Login successful (simulated):', result);
+      
+      // Store simulated auth data in localStorage for demo
+      localStorage.setItem('authToken', result.token);
+      localStorage.setItem('userData', JSON.stringify(result.user));
+      
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Network error:', error);
-      // You can add network error handling here
+      console.error('Simulation error:', error);
+      // You can add error handling here (e.g., show error message)
     } finally {
       setIsLoading(false);
     }
