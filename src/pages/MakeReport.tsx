@@ -141,7 +141,7 @@ export default function MakeReport() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-[90vh] bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="flex-1 bg-black text-white p-4 md:p-6 relative">
         <div
           className="absolute inset-0 opacity-20 pointer-events-none"
           style={{
@@ -150,7 +150,8 @@ export default function MakeReport() {
           }}
         />
 
-        <Card className="w-full max-w-md bg-black border-gray-800 border-0">
+        <div className="flex items-center justify-center min-h-full">
+          <Card className="w-full max-w-md bg-black border-gray-800 border-0">
           <CardContent className="p-8 text-center space-y-6">
             <div className="flex justify-center">
               <CheckCircle className="h-16 w-16 text-green-400" />
@@ -190,12 +191,13 @@ export default function MakeReport() {
             </Button>
           </CardContent>
         </Card>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-[90vh] bg-black flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="flex-1 bg-black text-white p-4 md:p-6 relative">
       {/* Dotted background pattern */}
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
@@ -205,7 +207,8 @@ export default function MakeReport() {
         }}
       />
 
-      <Card className="w-full max-w-2xl bg-black border-gray-800 border-0">
+      <div className="flex items-center justify-center min-h-full">
+        <Card className="w-full max-w-2xl bg-black border-gray-800 border-0">
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3">
             <AlertTriangle className="h-6 w-6 text-red-400" />
@@ -505,6 +508,7 @@ export default function MakeReport() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }
