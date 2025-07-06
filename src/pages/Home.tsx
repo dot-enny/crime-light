@@ -1,21 +1,105 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
 import ModalDialog from "../components/ModalDialog";
 import LocationCard from "../components/Home/LocationCard";
 import ButlerMessage from "../components/Home/ButlerMessage";
 import AlertsSection from "../components/Home/AlertsSection";
+import SimulatedAlertsSection from "../components/Home/SimulatedAlertsSection";
 import MapView from "../components/Home/MapView";
 import Sidebar from "../components/Home/Sidebar";
 import { useHomeLogic } from "../hooks/useHomeLogic";
 
+// Simulated alert data pool
+const simulatedAlerts = [
+  {
+    id: 101,
+    type: 'warning' as const,
+    message: 'Suspicious activity reported at Tafawa Balewa Square',
+    distance: 'Distance: 1.2km from your location'
+  },
+  {
+    id: 102,
+    type: 'info' as const,
+    message: 'Road closure on Broad Street - use alternative route',
+    distance: 'Estimated delay: 15-20 minutes'
+  },
+  {
+    id: 103,
+    type: 'warning' as const,
+    message: 'Phone snatching incident near National Theatre',
+    distance: 'Distance: 0.5km from your location'
+  },
+  {
+    id: 104,
+    type: 'info' as const,
+    message: 'Power outage reported in Surulere area',
+    distance: 'Affected areas: Bode Thomas, Ojuelegba'
+  },
+  {
+    id: 105,
+    type: 'warning' as const,
+    message: 'Break-in attempt reported on Ikorodu Road',
+    distance: 'Distance: 2.1km from your location'
+  }
+];
+
 export default function Home() {
     const { shouldAnimate, isVisible } = useFirstLoadAnimation();
     const [alwaysAnimate, setAlwaysAnimate] = useState(false);
+    const [simulatedAlertsList, setSimulatedAlertsList] = useState<Array<{
+        id: number;
+        type: 'warning' | 'info';
+        timestamp: string;
+        message: string;
+        distance: string;
+        isNew?: boolean;
+    }>>([]);
     
     // Always trigger subtle animation on every visit
     useEffect(() => {
         const timer = setTimeout(() => setAlwaysAnimate(true), 200);
         return () => clearTimeout(timer);
+    }, []);        // Alert simulation system
+        useEffect(() => {
+            let alertIndex = 0;
+            
+            const addNewAlert = () => {
+                if (alertIndex < simulatedAlerts.length) {
+                    const alert = simulatedAlerts[alertIndex];
+                    const timestamp = 'Just now';
+                    
+                    setSimulatedAlertsList(prev => [{
+                        ...alert,
+                        timestamp,
+                        isNew: true
+                    }, ...prev]);
+                    
+                    // Remove the "isNew" flag after animation
+                    setTimeout(() => {
+                        setSimulatedAlertsList(prev => 
+                            prev.map(a => a.id === alert.id ? { ...a, isNew: false } : a)
+                        );
+                    }, 1000);
+                    
+                    alertIndex++;
+                }
+            };
+            
+            // Start adding alerts after 3 seconds, then every 8-15 seconds
+            const firstTimeout = setTimeout(addNewAlert, 3000);
+            
+            const intervalId = setInterval(() => {
+                addNewAlert();
+            }, Math.random() * 7000 + 8000); // Random interval between 8-15 seconds
+            
+            return () => {
+                clearTimeout(firstTimeout);
+                clearInterval(intervalId);
+            };
+        }, []);
+
+    const handleDismissSimulatedAlert = useCallback((id: number) => {
+        setSimulatedAlertsList(prev => prev.filter(alert => alert.id !== id));
     }, []);
     const {
         isAnalysisVisible,
@@ -88,6 +172,18 @@ export default function Home() {
                         isOpen={isAnalysisVisible} 
                         setIsOpen={setIsAnalysisVisible} 
                     />
+
+                    {/* Live Simulated Alerts */}
+                    <div className={shouldAnimate 
+                        ? `transition-all duration-700 ease-out delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
+                        : 'opacity-100 translate-y-0'
+                    }>
+                        <SimulatedAlertsSection 
+                            alerts={simulatedAlertsList}
+                            onDismissAlert={handleDismissSimulatedAlert}
+                            alwaysAnimate={alwaysAnimate}
+                        />
+                    </div>
 
                     <div className={shouldAnimate 
                         ? `transition-all duration-700 ease-out delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
