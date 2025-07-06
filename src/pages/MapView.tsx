@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css"
 import "../App.css"
 import { dangerousLocations } from "../data";
 import React from "react";
+import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
 
 // Custom hook to track window size for responsive behavior
 function useWindowSize() {
@@ -58,6 +59,7 @@ function MapInteractions({ center, zoom }: { center: LatLngTuple; zoom: number }
 }
 
 export const MapView = () => {
+    const { shouldAnimate, isVisible } = useFirstLoadAnimation({ alwaysAnimate: true });
     const defaultLagosCenter: LatLngTuple = [6.5244, 3.3792]; // A general center point for Lagos
     const windowSize = useWindowSize();
     
@@ -129,7 +131,11 @@ export const MapView = () => {
     return (
         <div className="flex flex-col h-full">
             {/* Responsive header with location buttons */}
-            <div className="bg-black">
+            <div className={`bg-black ${
+                shouldAnimate 
+                    ? `transition-all duration-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`
+                    : 'opacity-100 translate-y-0'
+            }`}>
                 <div className="flex flex-col sm:flex-row sm:items-center p-3 sm:p-4 bg-neutral-950 gap-3"
                     style={{
                         backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)`,
@@ -140,13 +146,18 @@ export const MapView = () => {
                         Quick Fly To:
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                        {dangerousLocations.slice(0, 5).map((loc) => (
+                        {dangerousLocations.slice(0, 5).map((loc, index) => (
                             <button
                                 key={loc.name}
                                 onClick={() => flyToLocation(loc.coordinates)}
-                                className="text-white bg-neutral-800 hover:bg-neutral-700 transition-colors duration-200 
+                                className={`text-white bg-neutral-800 hover:bg-neutral-700 transition-colors duration-200 
                                          px-3 py-2 text-xs sm:text-sm rounded-md border border-neutral-600
-                                         whitespace-nowrap"
+                                         whitespace-nowrap ${
+                                    shouldAnimate 
+                                        ? `transition-all duration-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`
+                                        : 'opacity-100 translate-y-0'
+                                }`}
+                                style={shouldAnimate ? { transitionDelay: `${400 + index * 50}ms` } : {}}
                             >
                                 {loc.name}
                             </button>
