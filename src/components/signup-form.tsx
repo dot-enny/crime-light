@@ -64,7 +64,7 @@ export function SignUpForm({
             localStorage.setItem('authToken', result.token);
             localStorage.setItem('userData', JSON.stringify(result.user));
             
-            navigate('/dashboard')
+            navigate('/dashboard', { state: { from: '/auth/sign-up' } })
         } catch (error) {
             console.error('Simulation error:', error)
             // You can add error handling here (e.g., show error message)

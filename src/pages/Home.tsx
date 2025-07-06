@@ -1,3 +1,4 @@
+import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
 import ModalDialog from "../components/ModalDialog";
 import LocationCard from "../components/Home/LocationCard";
 import ButlerMessage from "../components/Home/ButlerMessage";
@@ -7,6 +8,7 @@ import Sidebar from "../components/Home/Sidebar";
 import { useHomeLogic } from "../hooks/useHomeLogic";
 
 export default function Home() {
+    const { shouldAnimate, isVisible } = useFirstLoadAnimation();
     const {
         isAnalysisVisible,
         showAnalysis,
@@ -47,44 +49,74 @@ export default function Home() {
 
             <div className="flex flex-col lg:flex-row gap-6 h-full">
                 {/* Center Content */}
-                <div className="flex-1 order-2 lg:order-1">
+                <div className="flex-1 order-1 lg:order-1">
                     {/* Greeting */}
-                    <h2 className="text-xl md:text-2xl font-light mb-6 md:mb-8">
+                    <h2 className={`text-xl md:text-2xl font-light mb-6 md:mb-8 ${
+                        shouldAnimate 
+                            ? `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`
+                            : 'opacity-100 translate-y-0'
+                    }`}>
                         Hello, John. Sunny day out.
                     </h2>
 
-                    <LocationCard {...locationData} />
+                    <div className={shouldAnimate 
+                        ? `transition-all duration-700 ease-out delay-150 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
+                        : 'opacity-100 translate-y-0'
+                    }>
+                        <LocationCard {...locationData} />
+                    </div>
                     
-                    <ButlerMessage 
-                        message={butlerMessage}
-                        onShowAnalysis={showAnalysis}
-                    />
+                    <div className={shouldAnimate 
+                        ? `transition-all duration-700 ease-out delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
+                        : 'opacity-100 translate-y-0'
+                    }>
+                        <ButlerMessage 
+                            message={butlerMessage}
+                            onShowAnalysis={showAnalysis}
+                        />
+                    </div>
 
                     <ModalDialog 
                         isOpen={isAnalysisVisible} 
                         setIsOpen={setIsAnalysisVisible} 
                     />
 
-                    <AlertsSection 
-                        dismissedAlerts={dismissedAlerts}
-                        onDismissAlert={dismissAlert}
-                    />
+                    <div className={shouldAnimate 
+                        ? `transition-all duration-700 ease-out delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
+                        : 'opacity-100 translate-y-0'
+                    }>
+                        <AlertsSection 
+                            dismissedAlerts={dismissedAlerts}
+                            onDismissAlert={dismissAlert}
+                        />
+                    </div>
 
-                    <MapView 
-                        dismissedAlerts={dismissedAlerts}
-                        onDismissAlert={dismissAlert}
-                    />
+                    <div className={shouldAnimate 
+                        ? `transition-all duration-700 ease-out delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
+                        : 'opacity-100 translate-y-0'
+                    }>
+                        <MapView 
+                            dismissedAlerts={dismissedAlerts}
+                            onDismissAlert={dismissAlert}
+                        />
+                    </div>
                 </div>
 
                 {/* Right Sidebar */}
-                <Sidebar
-                    searchValue={searchValue}
-                    onSearchChange={setSearchValue}
-                    onEmergencyCall={handleEmergencyCall}
-                    onReportIncident={handleReportIncident}
-                    onShareLocation={handleShareLocation}
-                    onRequestEscort={handleRequestEscort}
-                />
+                <div className={`w-full lg:w-80 order-2 lg:order-2 ${
+                    shouldAnimate 
+                        ? `transition-all duration-700 ease-out delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`
+                        : 'opacity-100 translate-x-0'
+                }`}>
+                    <Sidebar
+                        searchValue={searchValue}
+                        onSearchChange={setSearchValue}
+                        onEmergencyCall={handleEmergencyCall}
+                        onReportIncident={handleReportIncident}
+                        onShareLocation={handleShareLocation}
+                        onRequestEscort={handleRequestEscort}
+                    />
+                </div>
             </div>
         </div>
     );

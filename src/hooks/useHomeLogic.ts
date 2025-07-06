@@ -45,7 +45,7 @@ export function useHomeLogic(): UseHomeLogicReturn {
 
   const handleReportIncident = useCallback(() => {
     console.log('Navigating to report incident');
-    navigate('/dashboard/make-report');
+    navigate('/dashboard/make-report', { state: { from: '/dashboard' } });
   }, [navigate]);
 
   const handleShareLocation = useCallback(() => {
