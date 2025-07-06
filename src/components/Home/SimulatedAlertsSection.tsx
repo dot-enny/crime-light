@@ -1,4 +1,5 @@
 import { Shield, AlertTriangle, Clock } from "lucide-react";
+import { useState } from "react";
 
 interface Alert {
   id: number;
@@ -7,6 +8,7 @@ interface Alert {
   message: string;
   distance: string;
   isNew?: boolean;
+  isDismissing?: boolean;
 }
 
 interface SimulatedAlertsSectionProps {
@@ -25,8 +27,9 @@ function SimulatedAlertCard({ alert, onDismiss }: { alert: Alert; onDismiss: (id
   const distanceColor = isWarning ? 'text-orange-300/80' : 'text-yellow-300/80';
 
   return (
-    <div className={`${bgColor} border ${borderColor} rounded-lg p-3 flex items-start gap-3 transition-all duration-500 ease-out
-      ${alert.isNew ? 'animate-pulse scale-105 shadow-lg' : 'scale-100'}`}>
+    <div className={`${bgColor} border ${borderColor} rounded-lg p-3 flex items-start gap-3 transition-all duration-300 ease-out
+      ${alert.isNew ? 'animate-pulse scale-105 shadow-lg' : 'scale-100'}
+      ${alert.isDismissing ? 'opacity-0 scale-98 translate-x-4' : 'opacity-100 scale-100 translate-x-0'}`}>
       {isWarning ? (
         <AlertTriangle size={16} className={`${iconColor} flex-shrink-0 mt-0.5`} />
       ) : (
@@ -47,6 +50,23 @@ function SimulatedAlertCard({ alert, onDismiss }: { alert: Alert; onDismiss: (id
 }
 
 export default function SimulatedAlertsSection({ alerts, onDismissAlert, alwaysAnimate = false }: SimulatedAlertsSectionProps) {
+  const [dismissingAlerts, setDismissingAlerts] = useState<Set<number>>(new Set());
+
+  const handleDismiss = (id: number) => {
+    // Mark alert as dismissing
+    setDismissingAlerts(prev => new Set(prev).add(id));
+    
+    // After animation completes, actually remove the alert
+    setTimeout(() => {
+      onDismissAlert(id);
+      setDismissingAlerts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+    }, 300); // Faster, more subtle timing
+  };
+
   if (alerts.length === 0) return null;
 
   return (
@@ -83,25 +103,34 @@ export default function SimulatedAlertsSection({ alerts, onDismissAlert, alwaysA
           </span>
         )}
       </h3>
-      <div className="space-y-3">
-        {alerts.map((alert, index) => (
-          <div
-            key={alert.id}
-            className={`transition-all duration-700 ease-out ${
-              alert.isNew 
-                ? 'animate-slide-in-left opacity-100 translate-x-0' 
-                : 'opacity-100 translate-x-0'
-            }`}
-            style={{ 
-              animationDelay: alert.isNew ? `${index * 150}ms` : '0ms' 
-            }}
-          >
-            <SimulatedAlertCard 
-              alert={alert} 
-              onDismiss={onDismissAlert}
-            />
-          </div>
-        ))}
+      <div className="transition-all duration-300 ease-out">
+        {alerts.map((alert, index) => {
+          const isDismissing = dismissingAlerts.has(alert.id);
+          
+          return (
+            <div
+              key={alert.id}
+              className={`transition-all duration-300 ease-out transform ${
+                alert.isNew && !isDismissing
+                  ? 'animate-fade-in-up opacity-100 translate-y-0' 
+                  : isDismissing
+                  ? 'opacity-0 scale-98 translate-x-2 -translate-y-2'
+                  : 'opacity-100 translate-x-0 translate-y-0'
+              }`}
+              style={{ 
+                animationDelay: alert.isNew ? `${index * 150}ms` : '0ms',
+                marginTop: index > 0 ? '12px' : '0px',
+                marginBottom: isDismissing ? '-60px' : '0px',
+                transition: 'all 0.3s ease-out, margin-bottom 0.3s ease-out'
+              }}
+            >
+              <SimulatedAlertCard 
+                alert={{...alert, isDismissing}} 
+                onDismiss={handleDismiss}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

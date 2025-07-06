@@ -1,4 +1,5 @@
 import { Shield } from "lucide-react";
+import { useState } from "react";
 import AlertCard from "./AlertCard";
 
 interface AlertsSectionProps {
@@ -25,7 +26,23 @@ const alertsData = [
 ];
 
 export default function AlertsSection({ dismissedAlerts, onDismissAlert, alwaysAnimate = false }: AlertsSectionProps) {
+  const [dismissingAlerts, setDismissingAlerts] = useState<Set<number>>(new Set());
   const hasAllAlertsDismissed = alertsData.every(alert => dismissedAlerts.includes(alert.id));
+
+  const handleDismiss = (id: number) => {
+    // Mark alert as dismissing
+    setDismissingAlerts(prev => new Set(prev).add(id));
+    
+    // After animation completes, actually remove the alert
+    setTimeout(() => {
+      onDismissAlert(id);
+      setDismissingAlerts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+    }, 300);
+  };
 
   return (
     <div className="mb-6 md:mb-8">
@@ -57,14 +74,32 @@ export default function AlertsSection({ dismissedAlerts, onDismissAlert, alwaysA
         Recent Alerts
       </h3>
       <div className="space-y-3">
-        {alertsData.map(alert => (
-          <AlertCard
-            key={alert.id}
-            {...alert}
-            isDismissed={dismissedAlerts.includes(alert.id)}
-            onDismiss={onDismissAlert}
-          />
-        ))}
+        {alertsData.map(alert => {
+          const isDismissed = dismissedAlerts.includes(alert.id);
+          const isDismissing = dismissingAlerts.has(alert.id);
+          
+          if (isDismissed) return null;
+          
+          return (
+            <div
+              key={alert.id}
+              className={`transition-all duration-300 ease-in-out ${
+                isDismissing 
+                  ? 'opacity-0 scale-95 -translate-y-2 mb-0 overflow-hidden max-h-0' 
+                  : 'opacity-100 scale-100 translate-y-0 mb-3 max-h-96'
+              }`}
+              style={{
+                marginBottom: isDismissing ? '0px' : '12px'
+              }}
+            >
+              <AlertCard
+                {...alert}
+                isDismissed={false}
+                onDismiss={handleDismiss}
+              />
+            </div>
+          );
+        })}
         
         {/* Empty State */}
         {hasAllAlertsDismissed && (
