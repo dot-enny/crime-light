@@ -99,6 +99,21 @@
   }
 }
 
+@keyframes drawBorder {
+  0% {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  50% {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: -1000;
+  }
+}
+
 /* Animation classes */
 .animate-fade-in {
   animation: fadeIn 0.8s ease-out forwards;
@@ -321,4 +336,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Removed traveling-border class - now using SVG in component */
 
