@@ -2,6 +2,7 @@ import { MapPin, Shield, Eye, Globe, Menu, X } from "lucide-react"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
+import AnimatedToggleButton from "../components/ui/AnimatedToggleButton";
 
 // Header Component
 const Header = () => {
@@ -30,15 +31,14 @@ const Header = () => {
                     </nav>
 
                     {/* Mobile menu button */}
-                    <button
-                        className="md:hidden p-2 rounded-md text-gray-700 hover:text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    >
-                        <div className="relative w-6 h-6">
-                            <Menu className={`h-6 w-6 absolute transition-all duration-300 ${isMenuOpen ? 'opacity-0 rotate-180' : 'opacity-100 rotate-0'}`} />
-                            <X className={`h-6 w-6 absolute transition-all duration-300 ${isMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-180'}`} />
-                        </div>
-                    </button>
+                    <AnimatedToggleButton
+                        isOpen={isMenuOpen}
+                        onToggle={() => setIsMenuOpen(!isMenuOpen)}
+                        OpenIcon={Menu}
+                        CloseIcon={X}
+                        className="md:hidden text-gray-700 hover:text-black hover:bg-gray-100 focus:ring-gray-500"
+                        srText="Toggle navigation menu"
+                    />
                 </div>
 
                 {/* Mobile Navigation Menu */}

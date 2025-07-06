@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom"
 import { HomeIcon, FileText, Bot, Map, LogOut, Menu, X } from "lucide-react"
 import { useState } from "react"
+import AnimatedToggleButton from "../components/ui/AnimatedToggleButton"
 
 export const DashBoardLayout = () => {
   const location = useLocation()
@@ -25,12 +26,14 @@ export const DashBoardLayout = () => {
             <img src="./profile-img.png" className="w-full h-full object-cover rounded-full" />
           </div>
           {/* Mobile menu button */}
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="lg:hidden p-2 rounded-md hover:bg-gray-300 transition-colors relative z-50"
-          >
-            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <AnimatedToggleButton
+            isOpen={isSidebarOpen}
+            onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+            OpenIcon={Menu}
+            CloseIcon={X}
+            className="lg:hidden hover:bg-gray-300 focus:ring-gray-500 relative z-50"
+            srText="Toggle sidebar"
+          />
         </div>
       </header>
 
