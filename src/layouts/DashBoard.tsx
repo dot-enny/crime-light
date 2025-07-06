@@ -7,7 +7,7 @@ export const DashBoardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const isActive = (path: string) => {
-    if (path === "/" && location.pathname === "/") return true
+    if (path === "/" && location.pathname === "/dashboard") return true
     if (path !== "/" && location.pathname.includes(path)) return true
     return false
   }
@@ -54,7 +54,7 @@ export const DashBoardLayout = () => {
             <Link 
               to="/dashboard" 
               state={{ from: location.pathname }}
-              className={`flex items-center gap-3 hover:text-white transition-colors ${isActive("/") ? "text-white" : "text-gray-400"}`}
+              className={`flex items-center gap-3 hover:text-gray-200 transition-colors ${isActive("/") ? "text-white" : "text-gray-400"}`}
               onClick={() => setIsSidebarOpen(false)}
             >
               <HomeIcon size={20} />
@@ -63,7 +63,7 @@ export const DashBoardLayout = () => {
             <Link 
               to="/dashboard/map-view" 
               state={{ from: location.pathname }}
-              className={`flex items-center gap-3 hover:text-white transition-colors ${isActive("map-view") ? "text-white" : "text-gray-400"}`}
+              className={`flex items-center gap-3 hover:text-gray-200 transition-colors ${isActive("map-view") ? "text-white" : "text-gray-400"}`}
               onClick={() => setIsSidebarOpen(false)}
             >
               <Map size={20} />
@@ -72,7 +72,7 @@ export const DashBoardLayout = () => {
             <Link 
               to="/dashboard/make-report" 
               state={{ from: location.pathname }}
-              className={`flex items-center gap-3 hover:text-white transition-colors ${isActive("make-report") ? "text-white" : "text-gray-400"}`}
+              className={`flex items-center gap-3 hover:text-gray-200 transition-colors ${isActive("make-report") ? "text-white" : "text-gray-400"}`}
               onClick={() => setIsSidebarOpen(false)}
             >
               <FileText size={20} />
@@ -84,7 +84,7 @@ export const DashBoardLayout = () => {
             </div>
             <Link 
               to="/auth/sign-in" 
-              className="absolute bottom-6 left-6 flex items-center gap-x-2 hover:text-red-400 transition-colors"
+              className="absolute bottom-6 left-6 flex items-center gap-x-2 hover:text-red-300 transition-colors"
               onClick={() => setIsSidebarOpen(false)}
             >
               <LogOut className="text-red-500" />

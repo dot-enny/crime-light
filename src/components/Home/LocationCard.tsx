@@ -13,7 +13,7 @@ interface LocationCardProps {
 
 export default function LocationCard({ currentTime, location, riskRating, alwaysAnimate = false }: LocationCardProps) {
   return (
-    <div className="rounded-lg p-3 md:p-4 mb-4 md:mb-6 inline-block w-full sm:w-auto relative">
+    <div className="rounded-lg p-3 md:p-4 mb-4 md:mb-6 inline-block w-fit relative">
       {/* Animated border - starts solid, becomes animated */}
       <svg 
         className="absolute inset-0 w-full h-full pointer-events-none"
