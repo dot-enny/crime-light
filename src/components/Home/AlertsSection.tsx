@@ -4,6 +4,7 @@ import AlertCard from "./AlertCard";
 interface AlertsSectionProps {
   dismissedAlerts: number[];
   onDismissAlert: (id: number) => void;
+  alwaysAnimate?: boolean;
 }
 
 const alertsData = [
@@ -23,13 +24,36 @@ const alertsData = [
   }
 ];
 
-export default function AlertsSection({ dismissedAlerts, onDismissAlert }: AlertsSectionProps) {
+export default function AlertsSection({ dismissedAlerts, onDismissAlert, alwaysAnimate = false }: AlertsSectionProps) {
   const hasAllAlertsDismissed = alertsData.every(alert => dismissedAlerts.includes(alert.id));
 
   return (
     <div className="mb-6 md:mb-8">
       <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-        <Shield size={20} className="text-orange-500" />
+        {alwaysAnimate ? (
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            className="text-orange-500"
+          >
+            <path
+              d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="100"
+              strokeDashoffset="100"
+              style={{
+                animation: 'drawShield 6s infinite ease-in-out'
+              }}
+            />
+          </svg>
+        ) : (
+          <Shield size={20} className="text-orange-500" />
+        )}
         Recent Alerts
       </h3>
       <div className="space-y-3">

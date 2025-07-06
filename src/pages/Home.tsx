@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
 import ModalDialog from "../components/ModalDialog";
 import LocationCard from "../components/Home/LocationCard";
@@ -9,6 +10,13 @@ import { useHomeLogic } from "../hooks/useHomeLogic";
 
 export default function Home() {
     const { shouldAnimate, isVisible } = useFirstLoadAnimation();
+    const [alwaysAnimate, setAlwaysAnimate] = useState(false);
+    
+    // Always trigger subtle animation on every visit
+    useEffect(() => {
+        const timer = setTimeout(() => setAlwaysAnimate(true), 200);
+        return () => clearTimeout(timer);
+    }, []);
     const {
         isAnalysisVisible,
         showAnalysis,
@@ -63,7 +71,7 @@ export default function Home() {
                         ? `transition-all duration-700 ease-out delay-150 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`
                         : 'opacity-100 translate-y-0'
                     }>
-                        <LocationCard {...locationData} />
+                        <LocationCard {...locationData} alwaysAnimate={alwaysAnimate} />
                     </div>
                     
                     <div className={shouldAnimate 
@@ -88,6 +96,7 @@ export default function Home() {
                         <AlertsSection 
                             dismissedAlerts={dismissedAlerts}
                             onDismissAlert={dismissAlert}
+                            alwaysAnimate={alwaysAnimate}
                         />
                     </div>
 
