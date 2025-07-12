@@ -1,5 +1,5 @@
 // Re-export the main Home component and its supporting modules
-export { default } from '../Home';
+export { default } from '../../pages/Home';
 
 // Export all types for external usage
 export type {

@@ -1,4 +1,4 @@
-import { Button } from "../ui/button"
+import { Button } from "../../components/ui/button"
 import type { TimePeriodSelectorProps, TimePeriod } from "../../types/incidents"
 
 const TIME_PERIODS: readonly TimePeriod[] = ["1D", "1W", "1M", "3M"] as const

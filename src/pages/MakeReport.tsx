@@ -10,7 +10,7 @@ import {
   EvidenceUpload,
   ValidationSummary,
   SuccessPage
-} from "../components/MakeReport"
+} from "../modules/reporting"
 
 export default function MakeReport() {
   const { shouldAnimate, isVisible } = useFirstLoadAnimation({ alwaysAnimate: true });

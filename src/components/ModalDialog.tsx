@@ -1,5 +1,5 @@
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import IncidentsAnalysis from './IncidentAnalysis'
+import IncidentsAnalysis from '../modules/analytics'
 
 export default function ModalDialog({ isOpen, setIsOpen } : { isOpen: boolean, setIsOpen: (val: boolean) => void }) {
 

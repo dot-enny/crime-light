@@ -1,29 +1,29 @@
 import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
 import { useHomeLogic } from "../hooks/useHomeLogic";
 import ModalDialog from "../components/ModalDialog";
-import LocationCard from "../components/Home/LocationCard";
-import ButlerMessage from "../components/Home/ButlerMessage";
-import AlertsSection from "../components/Home/AlertsSection";
-import SimulatedAlertsSection from "../components/Home/SimulatedAlertsSection";
-import MapView from "../components/Home/MapView";
-import Sidebar from "../components/Home/Sidebar";
+import LocationCard from "../modules/home/Home/LocationCard";
+import ButlerMessage from "../modules/home/Home/ButlerMessage";
+import AlertsSection from "../modules/home/Home/AlertsSection";
+import SimulatedAlertsSection from "../modules/home/Home/SimulatedAlertsSection";
+import MapView from "../modules/home/Home/MapView";
+import Sidebar from "../modules/home/Home/Sidebar";
 import {
   ANIMATION_CONFIG,
   LOCATION_DATA,
   BUTLER_MESSAGE
-} from "./Home/constants";
+} from "../modules/home/constants";
 import {
   createAnimationClass,
   createGreetingAnimationClass
-} from "./Home/helpers";
-import { useAlwaysAnimate, useSimulatedAlerts } from "./Home/hooks";
+} from "../modules/home/helpers";
+import { useAlwaysAnimate, useSimulatedAlerts } from "../modules/home/hooks";
 import {
   BackgroundPattern,
   AnimatedSection,
   Greeting,
   MainContent,
   SidebarContainer
-} from "./Home/components";
+} from "../modules/home/components";
 
 export default function Home() {
     const { shouldAnimate, isVisible } = useFirstLoadAnimation();

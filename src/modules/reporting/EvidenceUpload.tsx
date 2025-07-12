@@ -1,5 +1,5 @@
 import { Upload } from "lucide-react"
-import { Label } from "../ui/label"
+import { Label } from "../../components/ui/label"
 
 interface EvidenceUploadProps {
   evidence: File[]
