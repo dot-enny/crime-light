@@ -1,6 +1,7 @@
 import { AlertTriangle } from "lucide-react"
 import { Card, CardContent, CardHeader } from "../components/ui/card"
 import { Button } from "../components/ui/button"
+import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation"
 import {
   useReportForm,
   AnonymousToggle,
@@ -12,6 +13,7 @@ import {
 } from "../components/MakeReport"
 
 export default function MakeReport() {
+  const { shouldAnimate, isVisible } = useFirstLoadAnimation({ alwaysAnimate: true });
   const {
     formData,
     errors,
@@ -42,7 +44,7 @@ export default function MakeReport() {
   }
 
   return (
-    <div className="flex-1 bg-black text-white md:p-6 relative">
+    <div className="flex-1 bg-black text-white p-4 md:p-6 relative">
       {/* Dotted background pattern */}
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
@@ -56,7 +58,16 @@ export default function MakeReport() {
         <Card className="w-full max-w-2xl bg-black border-gray-800 border-0">
           <CardHeader className="pb-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-6 w-6 text-red-400" />
+              <AlertTriangle className={`h-6 w-6 text-red-400 ${
+                shouldAnimate 
+                  ? `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`
+                  : 'opacity-100'
+              }`} 
+              style={shouldAnimate ? {
+                strokeDasharray: isVisible ? '0' : '100',
+                strokeDashoffset: isVisible ? '0' : '100',
+                transition: 'stroke-dasharray 1.2s ease-out, stroke-dashoffset 1.2s ease-out, opacity 1s ease-out'
+              } : {}} />
               <h1 className="text-white text-xl font-semibold tracking-wide">REPORT AN INCIDENT</h1>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
