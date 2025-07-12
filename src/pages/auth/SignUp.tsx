@@ -1,4 +1,4 @@
-import { SignUpForm } from "../../components/signup-form"
+import { SignupForm } from "../../modules/auth";
 
 export const SignUp = () => {
   return (
@@ -11,7 +11,7 @@ export const SignUp = () => {
         />
         <h1 className="text-white text-2xl font-bold">Butler</h1>
       </div>
-      <SignUpForm />
+      <SignupForm />
     </div>
   )
 }
