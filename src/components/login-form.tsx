@@ -64,8 +64,8 @@ export function LoginForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6 min-w-sm", className)} {...props}>
-      <Card className="frosted-glass bg-neutral-900 text-white border-neutral-800">
+    <div className={cn("flex flex-col gap-6 sm:min-w-sm", className)} {...props}>
+      <Card className="frosted-glass bg-transparent border-none sm:bg-neutral-900 text-white sm:border-neutral-800">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
