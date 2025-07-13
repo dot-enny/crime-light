@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom"
 import { HomeIcon, FileText, Bot, Map, LogOut, Menu, X } from "lucide-react"
 import { useState } from "react"
-import AnimatedToggleButton from "../components/ui/AnimatedToggleButton"
+import { AnimatedToggleButton } from "../modules/shared/ui";
 
 export const DashBoardLayout = () => {
   const location = useLocation()

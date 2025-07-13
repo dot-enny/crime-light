@@ -1,8 +1,8 @@
 import { MapPin, Shield, Eye, Globe, Menu, X } from "lucide-react"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import AnimatedToggleButton from "../components/ui/AnimatedToggleButton";
+import { useScrollAnimation } from "../modules/shared/hooks/useScrollAnimation";
+import { AnimatedToggleButton } from "../modules/shared/ui";
 
 // Header Component
 const Header = () => {

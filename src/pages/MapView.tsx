@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css"
 import "../App.css"
 import { dangerousLocations } from "../data";
 import React from "react";
-import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
+import { useFirstLoadAnimation } from "../modules/shared/hooks/useFirstLoadAnimation";
 
 // Custom hook to track window size for responsive behavior
 function useWindowSize() {

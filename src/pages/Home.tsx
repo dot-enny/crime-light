@@ -1,6 +1,6 @@
-import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation";
-import { useHomeLogic } from "../hooks/useHomeLogic";
-import ModalDialog from "../components/ModalDialog";
+import { useFirstLoadAnimation } from "../modules/shared/hooks/useFirstLoadAnimation";
+import { useHomeLogic } from "../modules/shared/hooks/useHomeLogic";
+import { ModalDialog } from "../modules/shared/ui";
 import LocationCard from "../modules/home/Home/LocationCard";
 import ButlerMessage from "../modules/home/Home/ButlerMessage";
 import AlertsSection from "../modules/home/Home/AlertsSection";

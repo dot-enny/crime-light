@@ -1,7 +1,7 @@
 import { AlertTriangle } from "lucide-react"
-import { Card, CardContent, CardHeader } from "../components/ui/card"
-import { Button } from "../components/ui/button"
-import { useFirstLoadAnimation } from "../hooks/useFirstLoadAnimation"
+import { Card, CardContent, CardHeader } from "../modules/shared/ui";
+import { Button } from "../modules/shared/ui";
+import { useFirstLoadAnimation } from "../modules/shared/hooks/useFirstLoadAnimation"
 import {
   useReportForm,
   AnonymousToggle,
