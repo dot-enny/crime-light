@@ -1,6 +1,6 @@
 import { Eye, EyeOff } from "lucide-react"
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
+import { Button } from "../shared/ui";
+import { Input } from "../shared/ui";
 import { FormField } from "./FormField"
 import type { ReportForm } from "./types"
 

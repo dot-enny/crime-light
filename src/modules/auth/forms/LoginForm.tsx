@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from '../../../components/ui/input';
+import { Input } from '../../shared/ui';
 import { useLogin, usePasswordVisibility } from '../hooks';
 import { AuthCard, PasswordField, FormField, SubmitButton, ErrorDisplay } from '../components';
 import { AUTH_CONFIG } from '../constants';

@@ -1,15 +1,15 @@
-import { Card } from "../../components/ui/card"
+import { Card } from "../shared/ui";
 import { useState, useEffect } from "react"
 import type { 
   DataPoint, 
   TimePeriod, 
   IncidentsAnalysisProps
-} from "../../types/incidents"
+} from "../shared/types/incidents"
 import { 
   ANIMATION_DURATION,
   LIVE_UPDATE_INTERVAL
-} from "../../types/incidents"
-import { calculateRiskRating, applyRandomFluctuation } from "../../utils/incidentUtils"
+} from "../shared/types/incidents"
+import { calculateRiskRating, applyRandomFluctuation } from "../shared/utils/incidentUtils"
 import { incidentDataByPeriod } from "../../data/incidentData"
 
 // Import child components

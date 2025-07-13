@@ -1,4 +1,4 @@
-import type { QuickStatsGridProps } from "../../types/incidents"
+import type { QuickStatsGridProps } from "../shared/types/incidents"
 
 export default function QuickStatsGrid({ data }: QuickStatsGridProps) {
   const avgIncidents = Math.round(data.reduce((acc, item) => acc + item.average, 0) / data.length)

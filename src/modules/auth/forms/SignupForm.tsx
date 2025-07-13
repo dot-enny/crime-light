@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from '../../../components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select';
+import { Input } from '../../shared/ui';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../shared/ui';
 import { useSignup, usePasswordVisibility } from '../hooks';
 import { AuthCard, PasswordField, FormField, SubmitButton, ErrorDisplay } from '../components';
 import { AUTH_CONFIG, USER_ROLES } from '../constants';

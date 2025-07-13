@@ -1,6 +1,6 @@
 import { CheckCircle } from "lucide-react"
-import { Card, CardContent } from "../../components/ui/card"
-import { Button } from "../../components/ui/button"
+import { Card, CardContent } from "../shared/ui";
+import { Button } from "../shared/ui";
 import { useEffect, useState } from "react"
 
 interface SuccessPageProps {

@@ -1,5 +1,5 @@
-import type { TrendAnalysisProps } from "../../types/incidents"
-import { calculateTrend } from "../../utils/incidentUtils"
+import type { TrendAnalysisProps } from "../shared/types/incidents"
+import { calculateTrend } from "../shared/utils/incidentUtils"
 
 export default function TrendAnalysis({ data, selectedPeriod }: TrendAnalysisProps) {
   const trendPercent = calculateTrend(data)

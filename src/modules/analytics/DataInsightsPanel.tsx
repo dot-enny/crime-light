@@ -1,4 +1,4 @@
-import type { DataInsightsPanelProps } from "../../types/incidents"
+import type { DataInsightsPanelProps } from "../shared/types/incidents"
 
 export default function DataInsightsPanel({ selectedDataPoint }: DataInsightsPanelProps) {
   if (!selectedDataPoint) return null

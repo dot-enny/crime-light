@@ -1,5 +1,5 @@
-import { Button } from "../../components/ui/button"
-import type { TimePeriodSelectorProps, TimePeriod } from "../../types/incidents"
+import { Button } from "../shared/ui";
+import type { TimePeriodSelectorProps, TimePeriod } from "../shared/types/incidents"
 
 const TIME_PERIODS: readonly TimePeriod[] = ["1D", "1W", "1M", "3M"] as const
 

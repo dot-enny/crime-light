@@ -1,6 +1,6 @@
 import { Shield } from "lucide-react"
-import { Button } from "../../components/ui/button"
-import { Label } from "../../components/ui/label"
+import { Button } from "../shared/ui";
+import { Label } from "../shared/ui";
 
 interface AnonymousToggleProps {
   isAnonymous: boolean

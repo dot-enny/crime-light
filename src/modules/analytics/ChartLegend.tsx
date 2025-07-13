@@ -1,4 +1,4 @@
-import type { ChartLegendProps } from "../../types/incidents"
+import type { ChartLegendProps } from "../shared/types/incidents"
 
 export default function ChartLegend({}: ChartLegendProps) {
   return (

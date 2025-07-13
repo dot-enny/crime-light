@@ -1,4 +1,4 @@
-import type { RiskRatingDisplayProps } from "../../types/incidents"
+import type { RiskRatingDisplayProps } from "../shared/types/incidents"
 
 export default function RiskRatingDisplay({
   riskPercentage,

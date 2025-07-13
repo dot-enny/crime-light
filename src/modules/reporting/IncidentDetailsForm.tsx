@@ -1,6 +1,6 @@
 import { MapPin, Clock } from "lucide-react"
-import { Input } from "../../components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
+import { Input } from "../shared/ui";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui";
 import { FormField } from "./FormField"
 import { INCIDENT_TYPES, SEVERITY_LEVELS, LAGOS_AREAS, MIN_DESCRIPTION_LENGTH } from "./constants"
 import type { ReportForm } from "./types"

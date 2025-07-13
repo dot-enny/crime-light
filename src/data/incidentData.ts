@@ -1,4 +1,4 @@
-import type { PeriodData } from "../types/incidents"
+import type { PeriodData } from "../modules/shared/types/incidents"
 
 export const incidentDataByPeriod: PeriodData = {
   "1D": [

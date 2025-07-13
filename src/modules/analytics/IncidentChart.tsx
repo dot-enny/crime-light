@@ -1,6 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts"
-import type { IncidentChartProps, TooltipProps } from "../../types/incidents"
-import { CHART_DOMAIN, CHART_TICKS } from "../../types/incidents"
+import type { IncidentChartProps, TooltipProps } from "../shared/types/incidents"
+import { CHART_DOMAIN, CHART_TICKS } from "../shared/types/incidents"
 
 // Custom tooltip component
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {

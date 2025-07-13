@@ -1,10 +1,10 @@
 import React from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
-import { Input } from '../../components/ui/input';
-import { Label } from '../../components/ui/label';
-import { cn } from '../../lib/utils';
+import { Button } from '../shared/ui';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../shared/ui';
+import { Input } from '../shared/ui';
+import { Label } from '../shared/ui';
+import { cn } from '../shared/utils';
 import { CARD_STYLES } from './constants';
 import type { AuthCardProps, PasswordFieldProps } from './types';
 
