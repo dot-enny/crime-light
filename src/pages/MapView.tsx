@@ -7,6 +7,8 @@ import "../App.css"
 import { dangerousLocations } from "../data";
 import React from "react";
 import { useFirstLoadAnimation } from "../modules/shared/hooks/useFirstLoadAnimation";
+import { CrimeFilter, CrimeTypeBadge } from "../components/CrimeFilter";
+import { CRIME_TYPES, getUniqueCrimeTypes, filterLocationsByCrimeType } from "../utils/crimeTypes";
 
 // Custom hook to track window size for responsive behavior
 function useWindowSize() {
@@ -76,6 +78,16 @@ export const MapView = () => {
     
     const [mapCenter, setMapCenter] = React.useState<LatLngTuple>(defaultLagosCenter);
     const [mapZoom, setMapZoom] = React.useState(getInitialZoom());
+    
+    // Crime filtering state
+    const [selectedCrimeType, setSelectedCrimeType] = React.useState<string>(CRIME_TYPES.ALL);
+    
+    // Get available crime types and filtered locations
+    const availableCrimeTypes = React.useMemo(() => getUniqueCrimeTypes(dangerousLocations), []);
+    const filteredLocations = React.useMemo(() => 
+        filterLocationsByCrimeType(dangerousLocations, selectedCrimeType), 
+        [selectedCrimeType]
+    );
 
     // Update zoom when screen size changes
     React.useEffect(() => {
@@ -164,6 +176,21 @@ export const MapView = () => {
                         ))}
                     </div>
                 </div>
+                
+                {/* Crime Filter Section */}
+                <div className="px-3 sm:px-4 pb-3 bg-neutral-950 border-t border-neutral-800">
+                    <CrimeFilter
+                        selectedCrimeType={selectedCrimeType}
+                        onCrimeTypeChange={setSelectedCrimeType}
+                        availableCrimeTypes={availableCrimeTypes}
+                        className="pt-3"
+                    />
+                    {selectedCrimeType !== CRIME_TYPES.ALL && (
+                        <div className="mt-2 text-xs text-gray-400">
+                            Showing {filteredLocations.length} of {dangerousLocations.length} locations
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="flex-1 relative min-h-0">
@@ -179,7 +206,7 @@ export const MapView = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <MapInteractions center={mapCenter} zoom={mapZoom} />
-                    {dangerousLocations.map((location, index) => (
+                    {filteredLocations.map((location, index) => (
                         <Marker
                             key={index}
                             position={location.coordinates}
@@ -197,7 +224,14 @@ export const MapView = () => {
                                 <div className="text-sm max-w-xs">
                                     <b className={isMobile ? 'text-sm' : 'text-base'}>{location.name}</b><br />
                                     <span className="text-xs">Risk Level: <strong>{getSafetyText(location.safetyRating)}</strong></span><br />
-                                    <span className="text-xs">{location.description}</span>
+                                    <span className="text-xs mb-2 block">{location.description}</span>
+                                    
+                                    {/* Crime Type Badges */}
+                                    <div className="flex flex-wrap gap-1 mt-2">
+                                        {location.crimeTypes.map((crimeType, idx) => (
+                                            <CrimeTypeBadge key={idx} crimeType={crimeType} size="sm" />
+                                        ))}
+                                    </div>
                                 </div>
                             </Popup>
                         </Marker>
