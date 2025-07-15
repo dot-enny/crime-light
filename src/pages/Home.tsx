@@ -86,47 +86,49 @@ export const Home = () => {
 
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <div className="flex flex-row h-[100vh] w-[100vw] overflow-x-hidden max-md:flex-col">
             {/* Optional: Add buttons to fly to specific locations */}
-            <div className="flex flex-col">
-                <h3>Quick Fly To:</h3>
+            <h3 className="md:text-lg md:mb-4 text-center md:hidden">Quick Fly To</h3>
+            <div className="flex flex-wrap md:flex-col p-4 max-md:w-full w-[20%] min-w-0 items-center max-md:justify-center">
+            <h3 className="md:text-lg md:mb-4 text-center max-md:hidden">Quick Fly To</h3>
                 {dangerousLocations.slice(0, 5).map((loc) => ( // Show first 5 for brevity
                     <button
                         key={loc.name}
                         onClick={() => flyToLocation(loc.coordinates)}
-                        style={{ margin: '5px', padding: '8px 12px', cursor: 'pointer' }}
+                        className="m-1 max-md:w-fit md:px-2 md:py-3 p-1 cursor-pointer w-full box-border"
                     >
                         {loc.name}
                     </button>
                 ))}
             </div>
-            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true}>
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <MapInteractions center={mapCenter} zoom={mapZoom} />
-                {dangerousLocations.map((location, index) => (
-                    <Marker
-                        key={index}
-                        position={location.coordinates}
-                        // You could customize the icon color based on the safetyRating
-                        icon={L.divIcon({
-                            className: 'custom-div-icon',
-                            html: `<div style="background-color:${getSafetyColor(location.safetyRating)}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
-                            iconSize: [24, 24],
-                            iconAnchor: [12, 12]
-                        })}
-                    >
-                        <Popup>
-                            <b>{location.name}</b><br />
-                            Risk Level: <strong>{getSafetyText(location.safetyRating)}</strong><br />
-                            {location.description}
-                        </Popup>
-                    </Marker>
-                ))}
-
-            </MapContainer>
+            <div className="flex-1 md:w-[80%] min-w-0 overflow-hidden">
+                <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} style={{ width: '100%', height: '100%' }}>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MapInteractions center={mapCenter} zoom={mapZoom} />
+                    {dangerousLocations.map((location, index) => (
+                        <Marker
+                            key={index}
+                            position={location.coordinates}
+                            // You could customize the icon color based on the safetyRating
+                            icon={L.divIcon({
+                                className: 'custom-div-icon',
+                                html: `<div style="background-color:${getSafetyColor(location.safetyRating)}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
+                                iconSize: [24, 24],
+                                iconAnchor: [12, 12]
+                            })}
+                        >
+                            <Popup>
+                                <b>{location.name}</b><br />
+                                Risk Level: <strong>{getSafetyText(location.safetyRating)}</strong><br />
+                                {location.description}
+                            </Popup>
+                        </Marker>
+                    ))}
+                </MapContainer>
+            </div>
         </div>
     )
 };
