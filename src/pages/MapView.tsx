@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap, useMapEvents } from "react-leaflet";
 
 import type { LatLngTuple } from "leaflet";
 import L from 'leaflet';
@@ -32,22 +32,39 @@ function useWindowSize() {
     return windowSize;
 }
 
-// --- Component for handling map interactions (e.g., click-to-fly) ---
-function MapInteractions({ center, zoom }: { center: LatLngTuple; zoom: number }) {
-    const map = useMap(); // Get the map instance
+// --- Component for handling Lagos-specific map interactions and restrictions ---
+function LagosMapInteractions({ center, zoom, bounds }: { 
+    center: LatLngTuple; 
+    zoom: number; 
+    bounds: { north: number; south: number; east: number; west: number; }
+}) {
+    const map = useMap();
 
-    // Event handler for general map clicks
+    // Event handler for map clicks with Lagos boundary restrictions
     useMapEvents({
         click: (e) => {
-            map.flyTo(e.latlng, map.getZoom(), {
-                animate: true,
-                duration: 1.5 // Animation duration in seconds
-            });
-            // Optionally, you could set a marker at the clicked location here
+            const { lat, lng } = e.latlng;
+            
+            // Check if click is within Lagos bounds
+            if (lat >= bounds.south && lat <= bounds.north && 
+                lng >= bounds.west && lng <= bounds.east) {
+                map.flyTo(e.latlng, Math.max(map.getZoom(), 13), {
+                    animate: true,
+                    duration: 1.5
+                });
+            }
         },
+        moveend: () => {
+            // Keep map centered on Lagos if user pans too far
+            const currentCenter = map.getCenter();
+            if (currentCenter.lat < bounds.south || currentCenter.lat > bounds.north ||
+                currentCenter.lng < bounds.west || currentCenter.lng > bounds.east) {
+                map.flyTo(center, zoom, { animate: true, duration: 1.0 });
+            }
+        }
     });
 
-    // Effect to fly to a new center/zoom if props change (e.g., from an external button)
+    // Effect to fly to new center/zoom for Lagos locations
     React.useEffect(() => {
         if (center && zoom) {
             map.flyTo(center, zoom, {
@@ -55,29 +72,52 @@ function MapInteractions({ center, zoom }: { center: LatLngTuple; zoom: number }
                 duration: 1.5
             });
         }
-    }, [center, zoom, map]); // Re-run effect if center, zoom, or map instance changes
+    }, [center, zoom, map]);
 
-    return null; // This component doesn't render anything directly
+    return null;
 }
 
 export const MapView = () => {
     const { shouldAnimate, isVisible } = useFirstLoadAnimation({ alwaysAnimate: true });
-    const defaultLagosCenter: LatLngTuple = [6.5244, 3.3792]; // A general center point for Lagos
+    
+    // Lagos State boundaries (approximate)
+    const LAGOS_BOUNDS = {
+        north: 6.7,
+        south: 6.35,
+        east: 3.8,
+        west: 3.0
+    };
+    
+    // Lagos State boundary polygon (simplified outline)
+    const LAGOS_BOUNDARY_POLYGON: LatLngTuple[] = [
+        [6.7, 3.0],   // Northwest
+        [6.7, 3.8],   // Northeast  
+        [6.35, 3.8],  // Southeast
+        [6.35, 3.0],  // Southwest
+        [6.7, 3.0]    // Close polygon
+    ];
+    
+    // More accurate Lagos center (Victoria Island/Ikoyi area)
+    const LAGOS_CENTER: LatLngTuple = [6.5244, 3.3792];
+    
     const windowSize = useWindowSize();
+    
+    // Lagos boundary toggle state
+    const [showLagosBoundary, setShowLagosBoundary] = React.useState(false);
     
     // Responsive values based on screen size
     const isMobile = windowSize.width < 640;
     const isTablet = windowSize.width >= 640 && windowSize.width < 1024;
     
-    // Set initial zoom based on screen size
-    const getInitialZoom = () => {
-        if (isMobile) return 10;
-        if (isTablet) return 11;
-        return 11;
+    // Lagos-optimized zoom levels
+    const getLagosZoom = () => {
+        if (isMobile) return 11;   // Closer zoom for mobile
+        if (isTablet) return 12;   // Medium zoom for tablet
+        return 12;                 // Good overview for desktop
     };
     
-    const [mapCenter, setMapCenter] = React.useState<LatLngTuple>(defaultLagosCenter);
-    const [mapZoom, setMapZoom] = React.useState(getInitialZoom());
+    const [mapCenter, setMapCenter] = React.useState<LatLngTuple>(LAGOS_CENTER);
+    const [mapZoom, setMapZoom] = React.useState(getLagosZoom());
     
     // Crime filtering state
     const [selectedCrimeType, setSelectedCrimeType] = React.useState<string>(CRIME_TYPES.ALL);
@@ -91,7 +131,7 @@ export const MapView = () => {
 
     // Update zoom when screen size changes
     React.useEffect(() => {
-        setMapZoom(getInitialZoom());
+        setMapZoom(getLagosZoom());
     }, [isMobile, isTablet]);
 
     L.Icon.Default.mergeOptions({
@@ -155,10 +195,25 @@ export const MapView = () => {
                     }}
                 >
                     <h3 className="text-white text-sm sm:text-base font-medium whitespace-nowrap mb-2 sm:mb-0 sm:mr-4">
-                        Quick Fly To:
+                        Lagos Quick Navigation:
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                        {dangerousLocations.slice(0, 5).map((loc, index) => (
+                        {/* Add Lagos-specific quick navigation buttons */}
+                        <button
+                            onClick={() => flyToLocation(LAGOS_CENTER)}
+                            className={`text-white bg-blue-700 hover:bg-blue-600 transition-colors duration-200 
+                                     px-3 py-2 text-xs sm:text-sm rounded-md border border-blue-500
+                                     whitespace-nowrap ${
+                                shouldAnimate 
+                                    ? `transition-all duration-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`
+                                    : 'opacity-100 translate-y-0'
+                            }`}
+                            style={shouldAnimate ? { transitionDelay: '400ms' } : {}}
+                        >
+                            Lagos Center
+                        </button>
+                        
+                        {dangerousLocations.slice(0, 4).map((loc, index) => (
                             <button
                                 key={loc.name}
                                 onClick={() => flyToLocation(loc.coordinates)}
@@ -169,7 +224,7 @@ export const MapView = () => {
                                         ? `transition-all duration-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`
                                         : 'opacity-100 translate-y-0'
                                 }`}
-                                style={shouldAnimate ? { transitionDelay: `${400 + index * 50}ms` } : {}}
+                                style={shouldAnimate ? { transitionDelay: `${450 + index * 50}ms` } : {}}
                             >
                                 {loc.name}
                             </button>
@@ -179,12 +234,27 @@ export const MapView = () => {
                 
                 {/* Crime Filter Section */}
                 <div className="px-3 sm:px-4 pb-3 bg-neutral-950 border-t border-neutral-800">
-                    <CrimeFilter
-                        selectedCrimeType={selectedCrimeType}
-                        onCrimeTypeChange={setSelectedCrimeType}
-                        availableCrimeTypes={availableCrimeTypes}
-                        className="pt-3"
-                    />
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-3">
+                        <CrimeFilter
+                            selectedCrimeType={selectedCrimeType}
+                            onCrimeTypeChange={setSelectedCrimeType}
+                            availableCrimeTypes={availableCrimeTypes}
+                        />
+                        
+                        {/* Lagos Boundary Toggle */}
+                        <div className="flex items-center gap-2">
+                            <label className="flex items-center gap-2 text-white text-sm cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={showLagosBoundary}
+                                    onChange={(e) => setShowLagosBoundary(e.target.checked)}
+                                    className="w-4 h-4 text-blue-600 bg-neutral-800 border-neutral-600 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <span className="text-xs">Show Lagos Boundary</span>
+                            </label>
+                        </div>
+                    </div>
+                    
                     {selectedCrimeType !== CRIME_TYPES.ALL && (
                         <div className="mt-2 text-xs text-gray-400">
                             Showing {filteredLocations.length} of {dangerousLocations.length} locations
@@ -200,12 +270,35 @@ export const MapView = () => {
                     scrollWheelZoom={true}
                     className="w-full h-full absolute inset-0"
                     style={{ zIndex: 1 }}
+                    maxBounds={[
+                        [LAGOS_BOUNDS.south, LAGOS_BOUNDS.west], // Southwest corner
+                        [LAGOS_BOUNDS.north, LAGOS_BOUNDS.east]  // Northeast corner
+                    ]}
+                    maxBoundsViscosity={1.0}
+                    minZoom={10}
+                    maxZoom={18}
                 >
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <MapInteractions center={mapCenter} zoom={mapZoom} />
+                    <LagosMapInteractions center={mapCenter} zoom={mapZoom} bounds={LAGOS_BOUNDS} />
+                    
+                    {/* Lagos State Boundary Polygon */}
+                    {showLagosBoundary && (
+                        <Polygon
+                            positions={LAGOS_BOUNDARY_POLYGON}
+                            pathOptions={{
+                                color: '#3B82F6',
+                                weight: 2,
+                                fillColor: '#3B82F6',
+                                fillOpacity: 0.1,
+                                dashArray: '5, 5'
+                            }}
+                        />
+                    )}
+                    
+                    {/* Crime Location Markers */}
                     {filteredLocations.map((location, index) => (
                         <Marker
                             key={index}
