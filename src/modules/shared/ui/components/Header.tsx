@@ -1,6 +1,5 @@
-import React from "react";
-import { buttler } from "../assets";
 import { Link } from "react-router-dom";
+import { buttler } from "../../../../assets";
 
 const Header = () => {
     return (
