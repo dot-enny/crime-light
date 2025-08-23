@@ -134,20 +134,49 @@ export const MapView = () => {
         setMapZoom(getLagosZoom());
     }, [isMobile, isTablet]);
 
-    L.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    });
-    const getSafetyColor = (rating: number) => {
-        switch (rating) {
-            case 1: return 'red';     // Very High Risk
-            case 2: return 'orange';  // High Risk
-            case 3: return 'yellow';  // Elevated Risk
-            case 4: return 'lightgreen'; // Moderate Risk (if you add safer areas later)
-            case 5: return 'green';   // Low Risk (if you add safer areas later)
-            default: return 'gray';
-        }
+    // Fix for Leaflet marker icons in React
+    React.useEffect(() => {
+        delete (L.Icon.Default.prototype as any)._getIconUrl;
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        });
+    }, []);
+    
+    // Create vibrant colored markers using SVG data URLs
+    const getMarkerIcon = (safetyRating: number) => {
+        const colorMappings = {
+            1: '#EF4444',    // Very High Risk - vibrant red
+            2: '#F97316',    // High Risk - vibrant orange  
+            3: '#FACC15',    // Elevated Risk - vibrant yellow/gold
+            4: '#22C55E',    // Moderate Risk - vibrant green
+            5: '#3B82F6'     // Low Risk - vibrant blue
+        };
+        
+        const color = colorMappings[safetyRating as keyof typeof colorMappings] || colorMappings[5];
+        
+        // Create SVG marker with exact vibrant color
+        const svgMarker = `
+            <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.5 0C5.596 0 0 5.596 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.596 19.404 0 12.5 0z" 
+                      fill="${color}" 
+                      stroke="#ffffff" 
+                      stroke-width="2"/>
+                <circle cx="12.5" cy="12.5" r="6" fill="#ffffff"/>
+            </svg>
+        `;
+        
+        const svgUrl = `data:image/svg+xml;base64,${btoa(svgMarker)}`;
+        
+        return new L.Icon({
+            iconUrl: svgUrl,
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
     };
 
     const getSafetyText = (rating: number) => {
@@ -255,6 +284,31 @@ export const MapView = () => {
                         </div>
                     </div>
                     
+                    {/* Risk Level Legend */}
+                    <div className="flex flex-wrap gap-3 mt-3 text-xs">
+                        <span className="text-gray-400">Risk Levels:</span>
+                        <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <span className="text-white">Very High</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                            <span className="text-white">High</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                            <span className="text-white">Elevated</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span className="text-white">Moderate</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span className="text-white">Low</span>
+                        </div>
+                    </div>
+                    
                     {selectedCrimeType !== CRIME_TYPES.ALL && (
                         <div className="mt-2 text-xs text-gray-400">
                             Showing {filteredLocations.length} of {dangerousLocations.length} locations
@@ -303,15 +357,7 @@ export const MapView = () => {
                         <Marker
                             key={index}
                             position={location.coordinates}
-                            icon={L.divIcon({
-                                className: 'custom-div-icon',
-                                html: `<div style="background-color:${getSafetyColor(location.safetyRating)}; 
-                                       width: ${isMobile ? '16px' : '20px'}; 
-                                       height: ${isMobile ? '16px' : '20px'}; 
-                                       border-radius: 50%; border: 2px solid white;"></div>`,
-                                iconSize: isMobile ? [20, 20] : [24, 24],
-                                iconAnchor: isMobile ? [10, 10] : [12, 12]
-                            })}
+                            icon={getMarkerIcon(location.safetyRating)} // Use custom icon based on safety rating
                         >
                             <Popup>
                                 <div className="text-sm max-w-xs">
